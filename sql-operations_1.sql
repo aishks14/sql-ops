@@ -22,6 +22,7 @@ DESCRIBE users;
 
 -- To verify and check if table was created successfully. 
 -- Although at this step there won't be any data in the table and values in rows would be NULL
+-- SELECT : This is an statement in SQL which is used to retrieve data from a database
 SELECT * FROM users;
 
 -- Inserting values in the table. Here fields must match with definition of the table
