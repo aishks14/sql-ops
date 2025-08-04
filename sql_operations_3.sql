@@ -30,3 +30,10 @@ UPDATE users
 UPDATE users 
 	SET salary = salary + 5000
     WHERE salary < 40000;
+    
+SELECT * FROM users;
+
+-- UPDATE: Change the email id and name of a user whose id is 8
+UPDATE users 
+SET email = 'vikram.deshpandey@sqlops.com', name = 'Vikram Deshpandey'
+WHERE id = 8;
