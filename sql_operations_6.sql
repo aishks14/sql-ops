@@ -136,10 +136,51 @@ USE sqloperations;
 			SELECT 
 			  CONCAT(full_name, ' (', email, ') - Joined on ', DATE_FORMAT(signup_date, '%d-%b-%Y')) AS user_summary
 			FROM accounts;
+            
+		-- LEFT() : It is a string manipulation tool that extracts a specified number of characters from the beginning (left side) of a string
+			-- LEFT() : Get the first 6 characters of a string
+            SELECT LEFT("String Functions", 6) AS short_string;
+            
+            -- LEFT() : Get the short name of the organization from `ceo` table. This should be first three characters of the `org_name`
+            SELECT LEFT(org_name, 3) AS short_org_name FROM ceo;
+            
+		-- RIGHT() : It is a string manipulation tool that extracts a specified number of characters from the last (right side) of a string
+			-- RIGHT() : Get the last 9 characters of a string
+            SELECT RIGHT("String Functions", 9) AS short_string;
+            
+            -- RIGHT() : Get the short name of the ceo from `ceo` table. This should be last six characters of the `name`
+            SELECT RIGHT(name, 6) AS short_name FROM ceo;
+            
+            -- RIGHT(): Get the RIGHT used in `users` table on email column
+            SELECT email, RIGHT(email, 3) FROM users;
+            
+		-- REVERSE() : It flips a string so the characters appear in reverse order
+			-- REVERSE() : Reverse a string
+            SELECT REVERSE('String Functions') AS reversed_string;
+		
+        -- REPLACE() : Tool for swapping out parts of a string with something new
+			-- REPLACE() : Replace a word in a string
+            SELECT REPLACE('SQL Tutorial', 'SQL', 'Python') AS UpdatedText;
+            
+            -- REPLACE() : Replace the email with new email
+            SELECT 
+			   id,
+			   email,
+			   REPLACE(email, '@example.com', '@wip.com') AS updated_email
+			FROM users;
+            
+            -- REPLACE() : Replace the email with new email. Provide condition with `WHERE` clause
+            SELECT 
+			   id,
+			   email,
+			   REPLACE(email, '@example.com', '@wip.com') AS updated_email
+			FROM users
+            WHERE id IN (1, 5, 7, 8, 9,20, 25, 30, 39);
         
         SHOW tables;
         
         SELECT * FROM ceo;
+        SELECT * FROM users;
         
         SELECT * FROM accounts;
         
