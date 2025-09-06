@@ -312,14 +312,86 @@ USE sqloperations;
 				-- RADIANS(): Convert degrees to radians using Pi value
 				SELECT RADIANS(3.14) AS radians_from_degrees;
 
-        SHOW tables;
-        
-        SELECT * FROM ceo;
-        SELECT * FROM users;
-        SELECT * FROM employee;
-        
-        SELECT * FROM accounts;
-        
-        UPDATE CEO
-        SET org_id = org_id + 100
-		WHERE c_id BETWEEN 1 AND 40;
+	-- CONDITIONAL FNCTIONS
+		-- These are the functions which are used to perform conditional operations based on certain criteria.
+			-- IF(): It is used to return one value if a condition is true and another value if the condition is false
+				-- IF() : Check if the salary from `employee` table is greater than 600000, then return 'High Salary', else return 'Low Salary'
+				SELECT
+					salary,
+					IF(salary > 600000, 'High Salary', 'Low Salary') AS salary_category
+				FROM employee;
+
+			-- CASE(): CASE expression evaluates conditions and returns a result when the first condition is met.
+				-- CASE() : Categorize salary from `employee` table with high, medium, and low bands.
+				SELECT e_id,
+					salary,
+					CASE 
+						WHEN salary >= 500000 THEN 'High'
+						WHEN salary BETWEEN 100000 AND 499999 THEN 'Medium'
+						ELSE 'Low'
+					END AS salary_band
+				FROM employee;
+
+			-- NESTED IF(): It is used to evaluate multiple conditions in a single statement
+				-- NESTED IF(): simplify the CASE logic into a single IF() statement
+				SELECT e_id,
+					salary,
+					IF(salary >= 500000, 'High',
+						IF(salary >= 100000, 'Medium', 'Low')) AS salary_band
+				FROM employee;
+
+			-- GREATEST(): This function is used to return largest value amongst the group of expressions
+				-- GREATEST(): Get the greatest value between 3, 7, and 5
+				SELECT GREATEST(3, 7, 5) AS greatest_value;
+                
+                -- GREATEST(): Get the greatest value from `salary` and 500000 inside `employee` table
+                SELECT 
+					e_id,
+                    name,
+                    salary,
+                    GREATEST(salary, 500000)
+				FROM employee;
+                
+			-- LEAST(): This function is used to return LEAST value amongst the group of expressions
+				-- LEAST(): Get the LEAST value between 3, 7, and 5
+				SELECT LEAST(3, 7, 5) AS least_value;
+                
+                -- LEAST(): Get the LEAST value from `salary` and 500000 inside `employee` table
+                SELECT 
+					e_id,
+                    name,
+                    salary,
+                    LEAST(salary, 500000)
+				FROM employee;
+
+		    -- NULLIF(): This function is used for compairing two values and when two values are equal, it returns null
+			    -- NULLIF(): Avoid false matching on `salary` inside `employee` table
+				SELECT 
+					e_id, 
+                    name,
+                    salary,
+					CASE 
+						WHEN NULLIF(salary, 575000.50) IS NULL THEN 'Average Match'
+						WHEN salary BETWEEN 100000 AND 499999 THEN 'Medium'
+                        WHEN salary >= 500000 THEN 'High'
+						ELSE 'Low'
+					END AS salary_band
+				FROM employee;
+                
+                -- NULLIF(): Return `Department Upgraded`, if department is `Data Science` from `employee` table, else return 'No Upgrade'. Provide an alias to it as 'department_status'
+				SELECT 
+					e_id, 
+                    name,
+                    department,
+                    salary,
+					IF(NULLIF(department, 'Data Science') IS NULL, 'Department Upgraded', 'No Upgrade') AS department_status
+				FROM employee;
+			
+			-- IFNULL(): It checks if a value is NULL, and if so, replaces it with a specified fallback. Returns expr2 if expr1 is NULL, else returns expr1
+				-- IFNULL(): In `accounts` table, check if `signup_date` is NULL, if so then return `null value found`, else return the signup date itself
+				SELECT	
+					account_id,
+					full_name, 
+					signup_date,
+					IFNULL(signup_date, 'null value found') AS signup_date_status
+				FROM accounts;
