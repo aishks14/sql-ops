@@ -2,7 +2,7 @@ USE sqloperations;
 -- SQL Functions and Operations
 	-- Here we will see some basic operations and functions in SQL
 	-- We will be using the same table 'users' created in previous steps    
-    -- AGGREGAT FUNCTIONS
+    -- AGGREGATE FUNCTIONS
 		-- Aggregate functions perform a calculation on a set of values and return a single value.
 		-- Common aggregate functions include COUNT, SUM, AVG, MAX, and MIN.
 
@@ -39,28 +39,29 @@ USE sqloperations;
 			-- AVG(): Calculate the average salary from the `users` table
 			SELECT AVG(salary) FROM users;
     
-    -- STRING functions: These are the functions to combine or modify the text fields
-		-- UPPER(): It converts the string to uppercase
-			-- UPPER(): Convert the names to upper case in `users` table for entire column. This will be using UPDATE query as well
-			UPDATE users
-			SET name = UPPER(name);
-        
-        -- LOWER(): It converts the string to lowercase
-			-- LOWER(): Convert the names to lower case in `users` table for entire column. This will be using UPDATE query as well
-			UPDATE users
-			SET name = LOWER(name);
-        
-        -- LENGTH(): This function is used to return the length of the string in bytes
-			-- LENGTH(): Get the length of each email from table `accounts` AS email_length
-			SELECT email, LENGTH(email) AS email_length FROM accounts;
-        
-			-- LENGTH(): Get all the CEOs from `ceo` table with email longer than 15 characters
-			SELECT * FROM ceo
-			WHERE LENGTH(email) > 15;
-        
-			-- LENGTH(): Sort all the CEOs data from `ceo` table with their name length in DESCENDING order
-			SELECT *, LENGTH(name) AS name_length FROM ceo
-			ORDER BY LENGTH(name) DESC;
+    -- STRING FUNCTIONS
+		-- These are the functions to combine or modify the text fields
+			-- UPPER(): It converts the string to uppercase
+				-- UPPER(): Convert the names to upper case in `users` table for entire column. This will be using UPDATE query as well
+				UPDATE users
+				SET name = UPPER(name);
+			
+			-- LOWER(): It converts the string to lowercase
+				-- LOWER(): Convert the names to lower case in `users` table for entire column. This will be using UPDATE query as well
+				UPDATE users
+				SET name = LOWER(name);
+			
+			-- LENGTH(): This function is used to return the length of the string in bytes
+				-- LENGTH(): Get the length of each email from table `accounts` AS email_length
+				SELECT email, LENGTH(email) AS email_length FROM accounts;
+			
+				-- LENGTH(): Get all the CEOs from `ceo` table with email longer than 15 characters
+				SELECT * FROM ceo
+				WHERE LENGTH(email) > 15;
+			
+				-- LENGTH(): Sort all the CEOs data from `ceo` table with their name length in DESCENDING order
+				SELECT *, LENGTH(name) AS name_length FROM ceo
+				ORDER BY LENGTH(name) DESC;
         
 		-- UPDATE() : Updatw the domain of the email randomly from few records to `@newdomain.com` from `accounts` table
 		UPDATE accounts
@@ -85,6 +86,7 @@ USE sqloperations;
 			FROM accounts
 			GROUP BY domain
 			ORDER BY domain_count DESC;
+
         -- ALTER : Alter table accounts and add a column pan_number with allowed string of 10 characters
 		ALTER TABLE accounts
 		ADD COLUMN pan_number VARCHAR(10);
@@ -176,11 +178,145 @@ USE sqloperations;
 			   REPLACE(email, '@example.com', '@wip.com') AS updated_email
 			FROM users
             WHERE id IN (1, 5, 7, 8, 9,20, 25, 30, 39);
-        
+
+	-- DATE FUNCTIONS
+		-- These are the functions which are used to manipulate and extract the information from date and time values.
+			-- NOW() : It returns the current date and time in 'YYYY-MM-DD HH:MM:SS' format
+				-- NOW() : Return currrent date from the `users` table. This should be done for all rows in the table and list down the name, and dob_year
+				SELECT name, NOW() AS query_date_time FROM users;
+                
+			-- YEAR() : It is used to extract the Year from a date
+				-- DATE() : Find the year of the `date_of_birth` from the `users` table to list the year AS `dob_year`. This should be done for all rows in the table and list down the name, and dob_year
+                SELECT name, YEAR(date_of_birth) AS dob_year FROM users;
+                
+			-- MONTH(): It is used to extract the month (from 1 to 12) from a date
+				-- MONTH() : Find the month of the `date_of_birth` from the `users` table to list the month AS `dob_month`. This should be done for all rows in the table and list down the name, and dob_month
+				SELECT name, MONTH(date_of_birth) AS dob_month FROM users;
+                
+			-- DAY() : It is used to extract the day from a date
+				-- DAY(): Find the day of the `date_of_birth` from the `users` table to list the day AS `dob_day`. This should be done for all rows in the table and list down the name, and dob_month
+				SELECT name, DAY(date_of_birth) AS dob_day FROM users;
+                
+			-- DATEDIFF() : It is used to calculate the difference between two dates. The returning part is the number of date part specified between two dates. MySQL only supports days which it returns as a result. 
+				-- DATEDIFF(): Find the date difference between `date_of_birth` and `created_at` from `users` table AS `date_difference`
+				SELECT name, date_of_birth, created_at, DATEDIFF(created_at, date_of_birth) AS date_difference FROM users;
+
+			-- TIMESTAMPDIFF() : This function is used to calculate the difference between two date or datetime values. This can be used to get the result in units of time (days, months, years, minutes, seconds)
+				-- TIMESTAMPDIFF(): Get the TIMESTAMPDIFF between `dob` and `appointed_on` from the table `CEO`, Get the results as `months_diff` calculating the difference of months from 2 dates. Give the results for `c_id`s between 21 and 40
+				SELECT 
+					name, 
+                    dob, 
+                    appointed_on, 
+                    TIMESTAMPDIFF(MONTH, dob, appointed_on) as months_diff
+				FROM ceo
+				WHERE c_id BETWEEN 621 AND 640;
+
+			-- TIMESTAMPDIFF(): Get the TIMESTAMPDIFF between `dob` and `appointed_on` from the table `CEO`. Get the results as `days_diff` calculating the difference of days from 2 dates. Give the result for `c_id`s between 5 and 10
+			SELECT 
+				name, 
+				dob, 
+				appointed_on, 
+				TIMESTAMPDIFF(DAY, dob, appointed_on) as days_diff 
+			FROM CEO WHERE c_id BETWEEN 605 AND 610;
+
+			-- TIMESTAMPDIFF(): Get the TIMESTAMPDIFF between `dob` and `appointed_on` from the table `CEO`, Get the results as `years_diff` calculating the difference of years from 2 dates. Give the results for `c_id`s between 5 and 40
+			SELECT 
+				name, 
+                dob, 
+                appointed_on, 
+                TIMESTAMPDIFF(YEAR, dob, appointed_on) as years_diff 
+			FROM CEO WHERE c_id BETWEEN 605 AND 640;
+
+			-- TIMESTAMPDIFF(): Get the TIMESTAMPDIFF between `dob` and `appointed_on` from the table `CEO`, Get the results as `weeks_diff` calculating the difference of weeks from 2 dates. Give the results for `c_id`s between 5 and 40
+			SELECT 
+				name, 
+                dob, 
+                appointed_on, 
+                TIMESTAMPDIFF(WEEK, dob, appointed_on) as weeks_diff 
+			FROM CEO WHERE c_id BETWEEN 605 AND 640;
+
+			-- DAYOFWEEK(): It is used to extract the weekday index from a date (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+				-- DAYOFWEEK(): Get the DAYOFWEEK from `appointed_on` column from `ceo` table. This should be done for all rows in the table and list down the name, and appointed_on date with day of week index
+				SELECT 
+					name, 
+					appointed_on, 
+					DAYOFWEEK(appointed_on) AS day_of_week_index 
+				FROM ceo;
+
+			-- DAYNAME(): It is used to extract the weekday name from a date
+				-- DAYNAME(): Get the DAYNAME from `appointed_on` column from `ceo` table. This should be done for all rows in the table and list down the name, and appointed_on date with day of week name
+				SELECT 
+					name, 
+					appointed_on, 
+					DAYNAME(appointed_on) AS day_of_week_name 
+				FROM ceo;
+
+	-- MATHEMATICAL FUNCTIONS
+		-- These are the functions which are used to perform mathematical calculations on numeric data.
+			-- ROUND(): It is used to round a number to a specified number of decimal places
+				-- ROUND(): Round the salary from `users` table to 2 decimal places.
+				SELECT 
+					salary, 
+					ROUND(salary, 2) AS rounded_salary 
+				FROM users;	
+
+			-- CEIL(): It is used to round a number up to the nearest integer
+				-- CEIL(): Round the salary from `users` table to the next highest integer.
+				SELECT 
+					salary,
+					CEIL(salary) AS ceil_salary 
+				FROM employee;
+
+			-- FLOOR(): It is used to round a number down to the nearest integer
+				-- FLOOR(): Round the salary from `users` table to the next lowest integer.
+				SELECT 
+					salary,
+					FLOOR(salary) AS floor_salary 
+				FROM employee;
+            
+			-- MOD(): It is used to return the remainder of a division operation between two numbers
+				-- MOD(): Get the MOD of salary by 1000 from `employee` table
+				SELECT 
+					salary,
+					MOD(salary, 1000) AS mod_salary 
+				FROM employee;
+
+				-- MOD(): Find Employees who are in even number numbered organizations from `employee` table
+				SELECT * FROM employee
+				WHERE MOD(org_id, 2) = 0;
+
+			-- POW(): It is used to raise a number to the power of another number
+				-- POW(): Get the POW of 2 raised to the power of 5
+				SELECT POW(2, 5) AS power_value;
+
+			-- SQRT(): It is used to calculate the square root of a number
+				-- SQRT(): Get the SQRT of 256
+				SELECT SQRT(256) AS sqrt_value;
+
+			-- TRUNCATE(): Truncates x to n decimal places (no rounding)
+				-- TRUNCATE(): Truncate the salary from `employee` table to 1 decimal place
+				SELECT 
+					salary,
+					TRUNCATE(salary, 1) AS trunc_salary
+				FROM employee; 
+
+			-- ABS(): Returns the absolute value of x
+				-- ABS(): Get the absolute value of any negative number that can be part of any table with numeric column.
+				SELECT ABS(-123.45) AS absolute_value;
+            
+			-- DEGREES(): It converths the radians to degress.
+				-- DEGREES(): Convert radians to degrees using Pi value
+				SELECT DEGREES(3.14) AS degrees_from_radians;
+			
+            -- RADIANS(): It converths the degrees to radians.
+				-- RADIANS(): Convert degrees to radians using Pi value
+				SELECT RADIANS(3.14) AS radians_from_degrees;
+
         SHOW tables;
         
         SELECT * FROM ceo;
         SELECT * FROM users;
+        SELECT * FROM employee;
         
         SELECT * FROM accounts;
         
