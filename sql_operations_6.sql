@@ -312,7 +312,7 @@ USE sqloperations;
 				-- RADIANS(): Convert degrees to radians using Pi value
 				SELECT RADIANS(3.14) AS radians_from_degrees;
 
-	-- CONDITIONAL FNCTIONS
+	-- CONDITIONAL FUNCTIONS
 		-- These are the functions which are used to perform conditional operations based on certain criteria.
 			-- IF(): It is used to return one value if a condition is true and another value if the condition is false
 				-- IF() : Check if the salary from `employee` table is greater than 600000, then return 'High Salary', else return 'Low Salary'
